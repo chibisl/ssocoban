@@ -17,7 +17,7 @@ public class Game extends StageGame {
 	public void create() {
 		super.create();
 		GameCore.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-		this.getScreen().setStage(new LevelStage());
+		this.getScreen().setStage(new LevelStage("level1"));
 	}
 
 }

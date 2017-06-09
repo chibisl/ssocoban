@@ -4,36 +4,37 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
 
 public class TiledActor extends Actor {
-	private TiledMapTileLayer layer;
-	private float tileWidth;
-	private float tileHeight;
-	private int columnCount;
-	private int rowCount;
+	private Array<Tile> tiles = new Array<Tile>();	
 
 	public TiledActor(TiledMapTileLayer layer) {
-		this.layer = layer;
-		tileWidth = layer.getTileWidth();
-		tileHeight = layer.getTileHeight();
-		columnCount = layer.getWidth();
-		rowCount = layer.getHeight();
+		float tileWidth = layer.getTileWidth();
+		float tileHeight = layer.getTileHeight();
+		int columnCount = layer.getWidth();
+		int rowCount = layer.getHeight();
+		
+		for(int x = 0; x < columnCount; x++) {
+			for(int y = 0; y < rowCount; y++) {
+				this.createTile(layer.getCell(x, y), x * tileWidth, y * tileHeight);
+			}
+		}
+		
 		this.setSize(tileWidth * columnCount, tileHeight * rowCount);
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		for(int x = 0; x < columnCount; x++) {
-			for(int y = 0; y < rowCount; y++) {
-				this.drawCell(batch, layer.getCell(x, y), x * tileWidth, y * tileHeight);
-			}
+		for(Tile tile : this.tiles) {
+			batch.draw(tile.getRegion(), this.getX() + tile.getX(), this.getY() + tile.getY());
 		}
 	}
 	
-	private void drawCell(Batch batch, Cell cell, float x, float y) {
+	private void createTile(Cell cell, float x, float y) {
 		if (cell != null) {
-			batch.draw(cell.getTile().getTextureRegion(), this.getX() + x, this.getY() + y);
+			this.tiles.add(new Tile(cell.getTile().getTextureRegion(), x, y));
 		}
 	}
 }
