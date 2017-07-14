@@ -1,4 +1,4 @@
-package ua.com.tlftgames.ssocoban.object;
+package ua.com.tlftgames.ssocoban.object.tile;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
