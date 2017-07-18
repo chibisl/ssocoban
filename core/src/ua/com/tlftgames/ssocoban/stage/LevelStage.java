@@ -11,8 +11,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
+import ua.com.tlftgames.ssocoban.factory.TiledActorFactory;
 import ua.com.tlftgames.ssocoban.object.LevelMap;
-import ua.com.tlftgames.ssocoban.object.tile.TiledActor;
 import ua.com.tlftgames.utils.scenes.scene2d.ManagedStage;
 
 public class LevelStage extends ManagedStage {
@@ -34,20 +34,18 @@ public class LevelStage extends ManagedStage {
     public void show() {
         TiledMap map = this.getAsset(this.tmxPath);
         this.clear();
+        TiledActorFactory factory = new TiledActorFactory();
 
         TiledMapTileLayer floorLayer = (TiledMapTileLayer) map.getLayers().get("floor");
-        TiledActor floor = new TiledActor(floorLayer);
-        this.addActor(floor);
+        this.addActor(factory.createActor(floorLayer));
         
-        TiledActor walls = new TiledActor((TiledMapTileLayer) map.getLayers().get("walls"));
-        this.addActor(walls);
+        this.addActor(factory.createActor((TiledMapTileLayer) map.getLayers().get("walls")));
         
         LevelMap level = new LevelMap((TiledMapTileLayer) map.getLayers().get("objects"));
         this.addActor(level);
         setKeyboardFocus(level);
         
-        TiledActor roof = new TiledActor((TiledMapTileLayer) map.getLayers().get("roof"));
-        this.addActor(roof);
+        this.addActor(factory.createActor((TiledMapTileLayer) map.getLayers().get("roof")));
     }
 
     @Override
