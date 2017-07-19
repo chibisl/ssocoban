@@ -1,4 +1,4 @@
-package ua.com.tlftgames.ssocoban.stage;
+package ua.com.tlftgames.ssocoban.level;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.forever;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.rotateTo;
@@ -11,18 +11,18 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
-import ua.com.tlftgames.ssocoban.factory.TiledActorFactory;
-import ua.com.tlftgames.ssocoban.object.LevelMap;
+import ua.com.tlftgames.ssocoban.Direction;
+import ua.com.tlftgames.ssocoban.utils.LevelFactory;
+import ua.com.tlftgames.ssocoban.utils.TiledActorFactory;
 import ua.com.tlftgames.utils.scenes.scene2d.ManagedStage;
 
 public class LevelStage extends ManagedStage {
-    private String name;
     private String tmxPath;
+    private Level level;
 
     public LevelStage(String name) {
-        this.name = name;
         StringBuilder builder = new StringBuilder("levels/");
-        this.tmxPath = builder.append(this.name).append(".tmx").toString();
+        this.tmxPath = builder.append(name).append(".tmx").toString();
     }
 
     @Override
@@ -33,19 +33,15 @@ public class LevelStage extends ManagedStage {
     @Override
     public void show() {
         TiledMap map = this.getAsset(this.tmxPath);
-        this.clear();
-        TiledActorFactory factory = new TiledActorFactory();
 
         TiledMapTileLayer floorLayer = (TiledMapTileLayer) map.getLayers().get("floor");
-        this.addActor(factory.createActor(floorLayer));
+        level = LevelFactory.create(floorLayer, (TiledMapTileLayer) map.getLayers().get("objects"));
         
-        this.addActor(factory.createActor((TiledMapTileLayer) map.getLayers().get("walls")));
-        
-        LevelMap level = new LevelMap((TiledMapTileLayer) map.getLayers().get("objects"));
-        this.addActor(level);
-        setKeyboardFocus(level);
-        
-        this.addActor(factory.createActor((TiledMapTileLayer) map.getLayers().get("roof")));
+        this.clear();
+        this.addActor(TiledActorFactory.create(floorLayer));
+        this.addActor(TiledActorFactory.create((TiledMapTileLayer) map.getLayers().get("walls")));
+        this.addActor(new TileActorGroup(level.getObjectMap()));
+        this.addActor(TiledActorFactory.create((TiledMapTileLayer) map.getLayers().get("roof")));
     }
 
     @Override
@@ -60,6 +56,22 @@ public class LevelStage extends ManagedStage {
     @Override
     public void uloadAssets() {
         this.unloadAsset(this.tmxPath);
+    }
+    
+    public boolean keyDown (int keycode) {
+    	int direction = Direction.getDirectionByKey(keycode);
+    	if (direction != Direction.NONE) {
+    		level.moveRobot(direction);
+    		return true;
+    	}
+    	return false;
+	}
+    
+    public void act (float delta) {
+    	super.act(delta);
+    	if (level != null) {
+    		level.update();
+    	}
     }
 
 }

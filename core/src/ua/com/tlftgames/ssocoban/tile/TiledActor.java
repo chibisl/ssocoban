@@ -1,4 +1,4 @@
-package ua.com.tlftgames.ssocoban.object.tile;
+package ua.com.tlftgames.ssocoban.tile;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;

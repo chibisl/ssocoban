@@ -1,15 +1,15 @@
-package ua.com.tlftgames.ssocoban.factory;
+package ua.com.tlftgames.ssocoban.utils;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.utils.Array;
 
-import ua.com.tlftgames.ssocoban.object.tile.Tile;
-import ua.com.tlftgames.ssocoban.object.tile.TiledActor;
+import ua.com.tlftgames.ssocoban.tile.Tile;
+import ua.com.tlftgames.ssocoban.tile.TiledActor;
 
 public class TiledActorFactory {
 
-	public TiledActor createActor(TiledMapTileLayer layer) {
+	public static TiledActor create(TiledMapTileLayer layer) {
 		float tileWidth = layer.getTileWidth();
 		float tileHeight = layer.getTileHeight();
 		int columnCount = layer.getWidth();
