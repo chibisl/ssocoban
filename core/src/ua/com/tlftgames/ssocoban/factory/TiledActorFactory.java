@@ -1,4 +1,4 @@
-package ua.com.tlftgames.ssocoban.utils;
+package ua.com.tlftgames.ssocoban.factory;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;

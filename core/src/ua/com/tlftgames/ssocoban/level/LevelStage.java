@@ -12,13 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
 import ua.com.tlftgames.ssocoban.Direction;
-import ua.com.tlftgames.ssocoban.utils.LevelFactory;
-import ua.com.tlftgames.ssocoban.utils.TiledActorFactory;
+import ua.com.tlftgames.ssocoban.controller.MovementController;
+import ua.com.tlftgames.ssocoban.factory.LevelFactory;
+import ua.com.tlftgames.ssocoban.factory.TiledActorFactory;
 import ua.com.tlftgames.utils.scenes.scene2d.ManagedStage;
 
 public class LevelStage extends ManagedStage {
     private String tmxPath;
-    private Level level;
+    private MovementController movementController;
 
     public LevelStage(String name) {
         StringBuilder builder = new StringBuilder("levels/");
@@ -35,13 +36,15 @@ public class LevelStage extends ManagedStage {
         TiledMap map = this.getAsset(this.tmxPath);
 
         TiledMapTileLayer floorLayer = (TiledMapTileLayer) map.getLayers().get("floor");
-        level = LevelFactory.create(floorLayer, (TiledMapTileLayer) map.getLayers().get("objects"));
+        Level level = LevelFactory.create(floorLayer, (TiledMapTileLayer) map.getLayers().get("objects"));
         
         this.clear();
         this.addActor(TiledActorFactory.create(floorLayer));
         this.addActor(TiledActorFactory.create((TiledMapTileLayer) map.getLayers().get("walls")));
         this.addActor(new TileActorGroup(level.getObjectMap()));
         this.addActor(TiledActorFactory.create((TiledMapTileLayer) map.getLayers().get("roof")));
+        
+        movementController = new MovementController(level);
     }
 
     @Override
@@ -61,17 +64,9 @@ public class LevelStage extends ManagedStage {
     public boolean keyDown (int keycode) {
     	int direction = Direction.getDirectionByKey(keycode);
     	if (direction != Direction.NONE) {
-    		level.moveRobot(direction);
+    		movementController.addMovement(direction);
     		return true;
     	}
     	return false;
 	}
-    
-    public void act (float delta) {
-    	super.act(delta);
-    	if (level != null) {
-    		level.update();
-    	}
-    }
-
 }
