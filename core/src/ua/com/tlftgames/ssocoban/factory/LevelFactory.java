@@ -27,8 +27,8 @@ public class LevelFactory {
                 	continue;
                 }
                 String type = cell.getTile().getProperties().get("type", String.class);
-                TileActor object = new TileActor(new Tile(cell.getTile().getTextureRegion(), x, y, tileWidth, tileHeight));
-                if (type.contentEquals("robot")) {
+                TileActor object = new TileActor(new Tile(cell.getTile(), x, y, tileWidth, tileHeight));
+                if (type != null && type.contentEquals("robot")) {
                 	level.setRobot(object);
                 }
                 actors[x][y] = object;
@@ -48,7 +48,13 @@ public class LevelFactory {
 		for (int y = rowCount - 1; y >= 0; y--) {
             for (int x = 0; x < columnCount; x++) {
                 Cell cell = floorLayer.getCell(x, y);
-                floorMap[x][y] = cell == null ? 0 : 1;
+                if (cell == null) {
+                	floorMap[x][y] = 0;
+                	continue;
+                }
+                
+                String type = cell.getTile().getProperties().get("type", String.class);
+                floorMap[x][y] = (type != null && type.contentEquals("exit")) ? 2 : 1;
             }
         }
 		

@@ -5,5 +5,10 @@
   <properties>
    <property name="type" value="box"/>
   </properties>
+  <objectgroup draworder="index">
+   <properties>
+    <property name="type" value="box"/>
+   </properties>
+  </objectgroup>
  </tile>
 </tileset>

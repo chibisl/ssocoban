@@ -72,7 +72,7 @@ public class Level {
 		if (x < 0 || y < 0 || x >= width || y >= height) {
 			return false;
 		}
-		return floorMap[x][y] == 1;
+		return floorMap[x][y] > 0;
 	}
 	
 	public boolean isCellOpen(int x, int y) {

@@ -1,16 +1,17 @@
 package ua.com.tlftgames.ssocoban.tile;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 
 public class Tile {
-    private TextureRegion region;
+    private TiledMapTile tiledMapTile;
     private float x;
     private float y;
     private float width;
     private float height;
 
-    public Tile(TextureRegion region, float x, float y, float width, float height) {
-    	this.region = region;
+    public Tile(TiledMapTile tiledMapTile, float x, float y, float width, float height) {
+    	this.tiledMapTile = tiledMapTile;
     	this.x = x;
     	this.y = y;
     	this.width = width;
@@ -34,7 +35,7 @@ public class Tile {
     }
 
     public TextureRegion getRegion() {
-        return region;
+        return tiledMapTile.getTextureRegion();
     }
 
 	public float getWidth() {

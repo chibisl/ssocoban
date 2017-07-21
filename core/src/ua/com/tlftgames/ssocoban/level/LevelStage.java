@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
@@ -69,4 +70,10 @@ public class LevelStage extends ManagedStage {
     	}
     	return false;
 	}
+    
+    @Override
+    public void draw() {
+    	AnimatedTiledMapTile.updateAnimationBaseTime();
+    	super.draw();
+    }
 }

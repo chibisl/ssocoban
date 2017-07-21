@@ -16,12 +16,11 @@ public class TiledActorFactory {
 		int rowCount = layer.getHeight();
 		
 		Array<Tile> tiles = new Array<Tile>();
-		
 		for(int x = 0; x < columnCount; x++) {
 			for(int y = 0; y < rowCount; y++) {
 				Cell cell = layer.getCell(x, y);
 				if (cell != null) {
-					tiles.add(new Tile(cell.getTile().getTextureRegion(), x, y, tileWidth, tileHeight));
+					tiles.add(new Tile(cell.getTile(), x, y, tileWidth, tileHeight));
 				}
 			}
 		}
