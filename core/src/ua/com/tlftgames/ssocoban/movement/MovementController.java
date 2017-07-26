@@ -31,7 +31,9 @@ public class MovementController {
 		if (direction == Direction.NONE) {
 			return;
 		}
+		
 		MovingObject robot = level.getRobot();
+		
 		Vector2 directionVector = Direction.getVector2ByDirection(direction);
 		Vector2 newPosition = robot.getPosition().add(directionVector);
 		final int newX = (int) newPosition.x;
@@ -45,22 +47,19 @@ public class MovementController {
 		}
 		
 		SequenceAction action = level.moveObject(robot, newX, newY);
-		
-		if (action != null) {
-			action.addAction(run(new Runnable() {
-				@Override
-				public void run() {
-					if (level.getFloorMap()[newX][newY] == 2) {
-						Gdx.app.exit();
-					}
-					move(directionQueue.getNext());
-				}
-			}));
-			
+		if (action == null) {
+			move(directionQueue.getNext());
 			return;
-		}
-
-		move(directionQueue.getNext());
+		}		
+		action.addAction(run(new Runnable() {
+			@Override
+			public void run() {
+				if (level.getFloorMap()[newX][newY] == 2) {
+					Gdx.app.exit();
+				}
+				move(directionQueue.getNext());
+			}
+		}));			
 	}
 
 }
