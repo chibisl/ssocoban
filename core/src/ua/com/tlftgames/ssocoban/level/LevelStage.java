@@ -12,10 +12,11 @@ import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
-import ua.com.tlftgames.ssocoban.Direction;
-import ua.com.tlftgames.ssocoban.controller.MovementController;
 import ua.com.tlftgames.ssocoban.factory.LevelFactory;
 import ua.com.tlftgames.ssocoban.factory.TiledActorFactory;
+import ua.com.tlftgames.ssocoban.movement.MovementController;
+import ua.com.tlftgames.ssocoban.movement.direction.Direction;
+import ua.com.tlftgames.ssocoban.object.tile.TileActorGroup;
 import ua.com.tlftgames.utils.scenes.scene2d.ManagedStage;
 
 public class LevelStage extends ManagedStage {

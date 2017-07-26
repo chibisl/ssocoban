@@ -13,7 +13,7 @@ public class Game extends StageGame {
 	public Game() {
 		super(1280, 720);
 	}
-	
+
 	public void create() {
 		super.create();
 		GameCore.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));

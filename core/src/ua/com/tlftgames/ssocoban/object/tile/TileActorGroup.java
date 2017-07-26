@@ -1,9 +1,7 @@
-package ua.com.tlftgames.ssocoban.level;
+package ua.com.tlftgames.ssocoban.object.tile;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
-
-import ua.com.tlftgames.ssocoban.tile.TileActor;
 
 public class TileActorGroup extends Group {
     private TileActor[][] actors;

@@ -1,4 +1,4 @@
-package ua.com.tlftgames.ssocoban;
+package ua.com.tlftgames.ssocoban.movement.direction;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
