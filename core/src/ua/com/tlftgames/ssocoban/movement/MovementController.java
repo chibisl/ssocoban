@@ -1,13 +1,12 @@
 package ua.com.tlftgames.ssocoban.movement;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 import ua.com.tlftgames.ssocoban.level.Level;
 import ua.com.tlftgames.ssocoban.movement.direction.Direction;
 import ua.com.tlftgames.ssocoban.movement.direction.DirectionQueue;
-import ua.com.tlftgames.ssocoban.object.MovingObject;
+import ua.com.tlftgames.ssocoban.object.GameObject;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -31,35 +30,29 @@ public class MovementController {
 		if (direction == Direction.NONE) {
 			return;
 		}
-		
-		MovingObject robot = level.getRobot();
-		
-		Vector2 directionVector = Direction.getVector2ByDirection(direction);
-		Vector2 newPosition = robot.getPosition().add(directionVector);
-		final int newX = (int) newPosition.x;
-		final int newY = (int) newPosition.y;
-		
-		MovingObject box;
-		Vector2 newBoxPosition = newPosition.add(directionVector);
-		if ((box = level.getObject(newX, newY)) != null && level.moveObject(box, (int)newBoxPosition.x, (int)newBoxPosition.y) == null) {
+
+		final GameObject robot = level.getRobot();
+
+		GameObject box;
+		if ((box = level.getNeighbour(robot, direction)) != null && level.moveObject(box, direction) == null) {
 			move(directionQueue.getNext());
 			return;
 		}
-		
-		SequenceAction action = level.moveObject(robot, newX, newY);
+
+		SequenceAction action = level.moveObject(robot, direction);
 		if (action == null) {
 			move(directionQueue.getNext());
 			return;
-		}		
+		}
 		action.addAction(run(new Runnable() {
 			@Override
 			public void run() {
-				if (level.getFloorMap()[newX][newY] == 2) {
+				if (level.getFloorMap()[(int) robot.getX()][(int) robot.getY()] == 2) {
 					Gdx.app.exit();
 				}
 				move(directionQueue.getNext());
 			}
-		}));			
+		}));
 	}
 
 }

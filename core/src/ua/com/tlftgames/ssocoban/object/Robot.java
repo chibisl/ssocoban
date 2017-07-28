@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 import ua.com.tlftgames.ssocoban.object.tile.Tile;
 
-public class Robot extends MovingObject {
+public class Robot extends GameObject {
 
 	public Robot(Tile tile) {
 		super(tile);

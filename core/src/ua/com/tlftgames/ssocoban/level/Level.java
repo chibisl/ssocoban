@@ -1,14 +1,16 @@
 package ua.com.tlftgames.ssocoban.level;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
-import ua.com.tlftgames.ssocoban.object.MovingObject;
+import ua.com.tlftgames.ssocoban.movement.direction.Direction;
+import ua.com.tlftgames.ssocoban.object.GameObject;
 
 public class Level {
 	private int width = 0;
 	private int height = 0;
-	private MovingObject[][] objectMap;
-	private MovingObject robot;
+	private GameObject[][] objectMap;
+	private GameObject robot;
 	private int[][] floorMap;
 
 	public Level(int width, int height) {
@@ -24,19 +26,19 @@ public class Level {
 		return height;
 	}
 
-	public MovingObject[][] getObjectMap() {
+	public GameObject[][] getObjectMap() {
 		return objectMap;
 	}
 
-	public void setObjectMap(MovingObject[][] objectMap) {
+	public void setObjectMap(GameObject[][] objectMap) {
 		this.objectMap = objectMap;
 	}
 
-	public MovingObject getRobot() {
+	public GameObject getRobot() {
 		return this.robot;
 	}
 
-	public void setRobot(MovingObject robot) {
+	public void setRobot(GameObject robot) {
 		this.robot = robot;
 	}
 
@@ -48,7 +50,12 @@ public class Level {
 		this.floorMap = floorMap;
 	}
 
-	public SequenceAction moveObject(MovingObject object, int x, int y) {
+	public SequenceAction moveObject(GameObject object, int direction) {
+		Vector2 newPosition = this.getNewPosition(object, direction);
+		return this.moveObject(object, (int) newPosition.x, (int) newPosition.y);
+	}
+
+	public SequenceAction moveObject(GameObject object, int x, int y) {
 		if (!hasFloor(x, y) || !isCellFree(x, y)) {
 			return null;
 		}
@@ -58,11 +65,16 @@ public class Level {
 			objectMap[(int) object.getX()][(int) object.getY()] = null;
 		}
 		objectMap[x][y] = object;
-		
+
 		return object.moveTo(x, y);
 	}
 
-	public MovingObject getObject(int x, int y) {
+	public GameObject getNeighbour(GameObject object, int direction) {
+		Vector2 neighbourPosition = this.getNewPosition(object, direction);
+		return this.getObject((int) neighbourPosition.x, (int) neighbourPosition.y);
+	}
+
+	public GameObject getObject(int x, int y) {
 		if (x < 0 || y < 0 || x >= width || y >= height) {
 			return null;
 		}
@@ -83,5 +95,10 @@ public class Level {
 		}
 
 		return this.hasFloor(x, y) && this.getObject(x, y) == null;
+	}
+
+	private Vector2 getNewPosition(GameObject object, int direction) {
+		Vector2 directionVector = Direction.getVector2ByDirection(direction);
+		return object.getPosition().add(directionVector);
 	}
 }

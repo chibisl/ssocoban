@@ -5,7 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
 import ua.com.tlftgames.ssocoban.level.Level;
 import ua.com.tlftgames.ssocoban.object.Box;
-import ua.com.tlftgames.ssocoban.object.MovingObject;
+import ua.com.tlftgames.ssocoban.object.GameObject;
 import ua.com.tlftgames.ssocoban.object.Robot;
 import ua.com.tlftgames.ssocoban.object.tile.Tile;
 
@@ -20,7 +20,7 @@ public class LevelFactory {
 		float tileWidth = objectLayer.getTileWidth();
 		float tileHeight = objectLayer.getTileHeight();
 
-		MovingObject[][] actors = new MovingObject[level.getWidth()][level.getHeight()];
+		GameObject[][] actors = new GameObject[level.getWidth()][level.getHeight()];
 
 		for (int y = rowCount - 1; y >= 0; y--) {
 			for (int x = 0; x < columnCount; x++) {
@@ -29,7 +29,7 @@ public class LevelFactory {
 					continue;
 				}
 				String type = cell.getTile().getProperties().get("type", String.class);
-				MovingObject object;
+				GameObject object;
 				if (type != null && type.contentEquals("robot")) {
 					object = new Robot(new Tile(cell.getTile(), x, y, tileWidth, tileHeight));
 					level.setRobot(object);
