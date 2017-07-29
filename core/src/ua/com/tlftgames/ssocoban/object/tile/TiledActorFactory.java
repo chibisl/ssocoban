@@ -1,11 +1,8 @@
-package ua.com.tlftgames.ssocoban.factory;
+package ua.com.tlftgames.ssocoban.object.tile;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.utils.Array;
-
-import ua.com.tlftgames.ssocoban.object.tile.Tile;
-import ua.com.tlftgames.ssocoban.object.tile.TiledActor;
 
 public class TiledActorFactory {
 
