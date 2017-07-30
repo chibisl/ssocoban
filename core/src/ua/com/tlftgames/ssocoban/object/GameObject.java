@@ -7,11 +7,16 @@ import ua.com.tlftgames.ssocoban.object.tile.Tile;
 import ua.com.tlftgames.ssocoban.object.tile.TileActor;
 
 public class GameObject extends TileActor {
-
+    private String name;
     private HashMap<Class<? extends Component>, Object> components = new HashMap<Class<? extends Component>, Object>();
 
-    public GameObject(Tile tile) {
+    public GameObject(String name, Tile tile) {
         super(tile);
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void destroy() {
