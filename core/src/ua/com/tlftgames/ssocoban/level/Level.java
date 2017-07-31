@@ -18,6 +18,15 @@ public class Level {
         this.width = width;
         this.height = height;
     }
+    
+    private Vector2 getNewPosition(GameObject object, int direction) {
+        Vector2 directionVector = Direction.getVector2ByDirection(direction);
+        return object.getPosition().add(directionVector);
+    }
+    
+    private boolean isValidCoordinates(int x, int y) {
+    	return (x >= 0 && y >= 0 && x < width && y < height);
+    }
 
     public int getWidth() {
         return width;
@@ -76,7 +85,7 @@ public class Level {
     }
 
     public GameObject getObject(int x, int y) {
-        if (x < 0 || y < 0 || x >= width || y >= height) {
+        if (!isValidCoordinates(x, y)) {
             return null;
         }
 
@@ -84,22 +93,29 @@ public class Level {
     }
 
     public boolean hasFloor(int x, int y) {
-        if (x < 0 || y < 0 || x >= width || y >= height) {
+        if (!isValidCoordinates(x, y)) {
             return false;
         }
         return floorMap[x][y] > 0;
     }
 
     public boolean isCellFree(int x, int y) {
-        if (x < 0 || y < 0 || x >= width || y >= height) {
+        if (!isValidCoordinates(x, y)) {
             return false;
         }
 
         return this.hasFloor(x, y) && this.getObject(x, y) == null;
     }
-
-    private Vector2 getNewPosition(GameObject object, int direction) {
-        Vector2 directionVector = Direction.getVector2ByDirection(direction);
-        return object.getPosition().add(directionVector);
+    
+    public void removeObject(GameObject object) {  	
+    	this.removeObject((int)object.getX(), (int)object.getY());
+    }
+    
+    public void removeObject(int x, int y) {
+    	if(!isValidCoordinates(x, y)) {
+    		return;
+    	}
+    	
+    	objectMap[x][y] = null;
     }
 }

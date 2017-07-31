@@ -1,39 +1,23 @@
 package ua.com.tlftgames.ssocoban.object;
 
-import java.util.HashMap;
+import com.badlogic.gdx.scenes.scene2d.Group;
 
-import ua.com.tlftgames.ssocoban.component.Component;
 import ua.com.tlftgames.ssocoban.object.tile.Tile;
 import ua.com.tlftgames.ssocoban.object.tile.TileActor;
 
 public class GameObject extends TileActor {
-    private String name;
-    private HashMap<Class<? extends Component>, Object> components = new HashMap<Class<? extends Component>, Object>();
 
-    public GameObject(String name, Tile tile) {
+    public GameObject(Tile tile) {
         super(tile);
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void destroy() {
         this.remove();
     }
-
-    public <T extends Component> T getComponent(Class<T> type) {
-        return type.cast(components.get(type));
-    }
-
-    public <T extends Component> void addComponent(Class<T> type, T component) {
-        component.setObject(this);
-        components.put(type, component);
-    }
-
-    public <T extends Component> void removeComponent(Class<T> type) {
-        components.remove(type);
+    
+    @Override
+    public void setParent(Group group) {
+    	super.setParent(group);
     }
 
 }

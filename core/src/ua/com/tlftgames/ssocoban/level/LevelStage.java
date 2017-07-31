@@ -42,7 +42,7 @@ public class LevelStage extends ManagedStage {
         this.clear();
         this.addActor(TiledActorFactory.create(floorLayer));
         this.addActor(TiledActorFactory.create((TiledMapTileLayer) map.getLayers().get("walls")));
-        this.addActor(new TileActorGroup(level.getObjectMap()));
+        this.addActor(new TileActorGroup(level));
         this.addActor(TiledActorFactory.create((TiledMapTileLayer) map.getLayers().get("roof")));
         
         movementController = new MovementController(level);

@@ -2,9 +2,10 @@ package ua.com.tlftgames.ssocoban.object.tile;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class TileActor extends Actor {
+import ua.com.tlftgames.utils.scenes.scene2d.ComponentActor;
+
+public class TileActor extends ComponentActor {
 	private Tile tile;
 
 	public TileActor(Tile tile) {
