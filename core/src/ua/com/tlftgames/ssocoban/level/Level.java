@@ -69,11 +69,8 @@ public class Level {
         if (!hasFloor(x, y) || !isCellFree(x, y)) {
             return null;
         }
-        int objectX = (int) object.getX();
-        int objectY = (int) object.getY();
-        if (objectX >= 0 && objectY >= 0 && objectX < width && objectY < height) {
-            objectMap[(int) object.getX()][(int) object.getY()] = null;
-        }
+        
+        this.removeObject(object);
         objectMap[x][y] = object;
 
         return object.getComponent(MovementComponent.class).moveTo(x, y);

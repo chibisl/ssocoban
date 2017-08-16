@@ -8,7 +8,7 @@ public class GameObjectFactory {
     public static GameObject create(String type, Tile tile) {
         GameObject object = new GameObject(tile);
         boolean isRobot = (type != null && type.contentEquals("robot"));
-        object.addComponent(MovementComponent.class, new MovementComponent(isRobot ? 0.1f : 0.07f));
+        object.addComponent(new MovementComponent(isRobot ? 0.1f : 0.02f));
  
         return object;
     }
