@@ -2,6 +2,9 @@
 <tileset name="env" tilewidth="64" tileheight="64" tilecount="256" columns="16">
  <image source="env.png" width="1024" height="1024"/>
  <tile id="91">
+  <properties>
+   <property name="type" value="exit"/>
+  </properties>
   <animation>
    <frame tileid="91" duration="150"/>
    <frame tileid="92" duration="150"/>

@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset name="objects" tilewidth="64" tileheight="128" tilecount="64" columns="16">
  <image source="objects.png" width="1024" height="512"/>
+ <tile id="0">
+  <properties>
+   <property name="type" value="box"/>
+  </properties>
+ </tile>
+ <tile id="1">
+  <properties>
+   <property name="type" value="box"/>
+  </properties>
+ </tile>
+ <tile id="2">
+  <properties>
+   <property name="type" value="box"/>
+  </properties>
+ </tile>
+ <tile id="3">
+  <properties>
+   <property name="type" value="box"/>
+  </properties>
+ </tile>
  <tile id="16">
+  <properties>
+   <property name="type" value="robot"/>
+  </properties>
   <animation>
    <frame tileid="16" duration="400"/>
    <frame tileid="17" duration="400"/>
   </animation>
  </tile>
  <tile id="18">
+  <properties>
+   <property name="type" value="robot"/>
+  </properties>
   <animation>
    <frame tileid="18" duration="100"/>
    <frame tileid="19" duration="100"/>
@@ -22,6 +48,7 @@
  <tile id="23">
   <properties>
    <property name="loop" type="bool" value="false"/>
+   <property name="type" value="robot"/>
   </properties>
   <animation>
    <frame tileid="23" duration="100"/>
@@ -36,24 +63,36 @@
   </animation>
  </tile>
  <tile id="32">
+  <properties>
+   <property name="type" value="robot"/>
+  </properties>
   <animation>
    <frame tileid="32" duration="100"/>
    <frame tileid="33" duration="100"/>
   </animation>
  </tile>
  <tile id="34">
+  <properties>
+   <property name="type" value="robot"/>
+  </properties>
   <animation>
    <frame tileid="34" duration="100"/>
    <frame tileid="35" duration="100"/>
   </animation>
  </tile>
  <tile id="36">
+  <properties>
+   <property name="type" value="robot"/>
+  </properties>
   <animation>
    <frame tileid="36" duration="100"/>
    <frame tileid="37" duration="100"/>
   </animation>
  </tile>
  <tile id="38">
+  <properties>
+    <property name="type" value="robot"/>
+  </properties>
   <animation>
    <frame tileid="38" duration="100"/>
    <frame tileid="39" duration="100"/>
@@ -62,6 +101,7 @@
  <tile id="48">
   <properties>
    <property name="loop" type="bool" value="false"/>
+   <property name="type" value="robot"/>
   </properties>
   <animation>
    <frame tileid="48" duration="100"/>

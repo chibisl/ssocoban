@@ -23,7 +23,7 @@ public class LevelStage extends ManagedStage {
     private MovementController movementController;
 
     public LevelStage(String name) {
-        StringBuilder builder = new StringBuilder("levels/");
+        StringBuilder builder = new StringBuilder("maps/");
         this.tmxPath = builder.append(name).append(".tmx").toString();
     }
 
@@ -41,7 +41,7 @@ public class LevelStage extends ManagedStage {
         
         this.clear();
         this.addActor(TiledActorFactory.create(floorLayer));
-        this.addActor(TiledActorFactory.create((TiledMapTileLayer) map.getLayers().get("walls")));
+        this.addActor(TiledActorFactory.create((TiledMapTileLayer) map.getLayers().get("wall")));
         this.addActor(new TileActorGroup(level));
         this.addActor(TiledActorFactory.create((TiledMapTileLayer) map.getLayers().get("roof")));
         
