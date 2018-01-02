@@ -4,11 +4,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 import ua.com.tlftgames.utils.scenes.scene2d.ComponentActor;
+import ua.com.tlftgames.utils.tiled.CellTile;
 
 public class TileActor extends ComponentActor {
-	private Tile tile;
+	private CellTile tile;
 
-	public TileActor(Tile tile) {
+	public TileActor(CellTile tile) {
 		this.tile = tile;
 		this.setPosition(tile.getX(), tile.getY());
 	}

@@ -4,6 +4,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.utils.Array;
 
+import ua.com.tlftgames.utils.tiled.CellTile;
+import ua.com.tlftgames.utils.tiled.TileCreator;
+
 public class TiledActorFactory {
 
 	public static TiledActor create(TiledMapTileLayer layer) {
@@ -12,12 +15,17 @@ public class TiledActorFactory {
 		int columnCount = layer.getWidth();
 		int rowCount = layer.getHeight();
 
-		Array<Tile> tiles = new Array<Tile>();
+		Array<CellTile> tiles = new Array<CellTile>();
 		for (int x = 0; x < columnCount; x++) {
 			for (int y = 0; y < rowCount; y++) {
 				Cell cell = layer.getCell(x, y);
 				if (cell != null) {
-					tiles.add(new Tile(cell.getTile(), x, y, tileWidth, tileHeight));
+					CellTile tile = TileCreator.createFromTiledMapTile(cell.getTile());
+					tile.setX(x);
+					tile.setY(y);
+					tile.setWidth(tileWidth);
+					tile.setHeight(tileHeight);
+					tiles.add(tile);
 				}
 			}
 		}

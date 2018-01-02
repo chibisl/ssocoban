@@ -4,10 +4,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 
-public class TiledActor extends Actor {
-	private Array<Tile> tiles;
+import ua.com.tlftgames.utils.tiled.CellTile;
 
-	public TiledActor(Array<Tile> tiles) {
+public class TiledActor extends Actor {
+	private Array<CellTile> tiles;
+
+	public TiledActor(Array<CellTile> tiles) {
 		this.tiles = tiles;
 	}
 
@@ -17,7 +19,7 @@ public class TiledActor extends Actor {
 		if (tiles == null) {
 			return;
 		}
-		for (Tile tile : this.tiles) {
+		for (CellTile tile : this.tiles) {
 			batch.draw(tile.getRegion(), this.getX() + tile.getRealX(), this.getY() + tile.getRealY());
 		}
 	}

@@ -2,12 +2,12 @@ package ua.com.tlftgames.ssocoban.object;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 
-import ua.com.tlftgames.ssocoban.object.tile.Tile;
 import ua.com.tlftgames.ssocoban.object.tile.TileActor;
+import ua.com.tlftgames.utils.tiled.CellTile;
 
 public class GameObject extends TileActor {
 
-    public GameObject(Tile tile) {
+    public GameObject(CellTile tile) {
         super(tile);
     }
 

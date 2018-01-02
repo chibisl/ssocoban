@@ -5,7 +5,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
 import ua.com.tlftgames.ssocoban.object.GameObject;
 import ua.com.tlftgames.ssocoban.object.GameObjectFactory;
-import ua.com.tlftgames.ssocoban.object.tile.Tile;
+import ua.com.tlftgames.utils.tiled.CellTile;
+import ua.com.tlftgames.utils.tiled.TileCreator;
 
 public class LevelFactory {
 
@@ -26,12 +27,17 @@ public class LevelFactory {
                 if (cell == null) {
                     continue;
                 }
-                String type = cell.getTile().getProperties().get("type", String.class);
-                GameObject object = GameObjectFactory.create(type,
-                        new Tile(cell.getTile(), x, y, tileWidth, tileHeight));
+                CellTile tile = TileCreator.createFromTiledMapTile(cell.getTile());
+				tile.setX(x);
+				tile.setY(y);
+				tile.setWidth(tileWidth);
+				tile.setHeight(tileHeight);
+				String type = cell.getTile().getProperties().get("type", String.class);
+                GameObject object = GameObjectFactory.create(type, tile);
                 if (type != null && type.contentEquals("robot")) {
                     level.setRobot(object);
                 }
+                
                 actors[x][y] = object;
             }
         }
