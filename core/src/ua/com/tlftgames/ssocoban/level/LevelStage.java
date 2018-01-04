@@ -7,15 +7,12 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
 import ua.com.tlftgames.ssocoban.movement.MovementController;
 import ua.com.tlftgames.ssocoban.movement.direction.Direction;
-import ua.com.tlftgames.ssocoban.object.tile.TileActorGroup;
-import ua.com.tlftgames.ssocoban.object.tile.TiledActorFactory;
 import ua.com.tlftgames.utils.scenes.scene2d.ManagedStage;
 
 public class LevelStage extends ManagedStage {
@@ -35,15 +32,11 @@ public class LevelStage extends ManagedStage {
     @Override
     public void show() {
         TiledMap map = this.getAsset(this.tmxPath);
-
-        TiledMapTileLayer floorLayer = (TiledMapTileLayer) map.getLayers().get("floor");
-        Level level = LevelFactory.create(floorLayer, (TiledMapTileLayer) map.getLayers().get("objects"));
+        
+        Level level = LevelFactory.create(map.getLayers());
         
         this.clear();
-        this.addActor(TiledActorFactory.create(floorLayer));
-        this.addActor(TiledActorFactory.create((TiledMapTileLayer) map.getLayers().get("wall")));
-        this.addActor(new TileActorGroup(level));
-        this.addActor(TiledActorFactory.create((TiledMapTileLayer) map.getLayers().get("roof")));
+        this.addActor(new LevelGroup(level));
         
         movementController = new MovementController(level);
     }

@@ -2,7 +2,7 @@ package ua.com.tlftgames.ssocoban.component;
 
 import ua.com.tlftgames.ssocoban.level.Level;
 import ua.com.tlftgames.ssocoban.movement.direction.Direction;
-import ua.com.tlftgames.ssocoban.object.GameObject;
+import ua.com.tlftgames.ssocoban.tiled.TileActor;
 
 public class ExplodeComponent extends InteractionComponent {
 	
@@ -15,10 +15,10 @@ public class ExplodeComponent extends InteractionComponent {
 	@Override
 	public void interact() {
 		for (int direction : directions) {
-			GameObject object = getLevel().getNeighbour((GameObject)this.getObject(), direction);
+			TileActor object = getLevel().getNeighbour((TileActor)this.getObject(), direction);
 			if (object != null && object.getComponent(InteractionComponent.class) instanceof ExplodeComponent) {
-				object.destroy();
-				((GameObject)this.getObject()).destroy();
+				object.remove();
+				((TileActor)this.getObject()).remove();
 				break;
 			}
 		}

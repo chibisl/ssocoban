@@ -1,70 +1,81 @@
 package ua.com.tlftgames.ssocoban.level;
 
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
-import ua.com.tlftgames.ssocoban.object.GameObject;
-import ua.com.tlftgames.ssocoban.object.GameObjectFactory;
-import ua.com.tlftgames.utils.tiled.CellTile;
-import ua.com.tlftgames.utils.tiled.TileCreator;
+import ua.com.tlftgames.ssocoban.component.MovementComponent;
+import ua.com.tlftgames.ssocoban.tiled.TileActor;
+import ua.com.tlftgames.ssocoban.tiled.TileActorCreator;
 
-public class LevelFactory {
+public class LevelFactory {	
 
-    public static Level create(TiledMapTileLayer floorLayer, TiledMapTileLayer objectLayer) {
-        Level level = new Level(floorLayer.getWidth(), floorLayer.getHeight());
-        level.setFloorMap(createFloorMap(floorLayer, level.getWidth(), level.getHeight()));
-
-        int columnCount = Math.min(objectLayer.getWidth(), level.getWidth());
-        int rowCount = Math.min(objectLayer.getHeight(), level.getHeight());
-        float tileWidth = objectLayer.getTileWidth();
-        float tileHeight = objectLayer.getTileHeight();
-
-        GameObject[][] actors = new GameObject[level.getWidth()][level.getHeight()];
-
-        for (int y = rowCount - 1; y >= 0; y--) {
-            for (int x = 0; x < columnCount; x++) {
-                Cell cell = objectLayer.getCell(x, y);
-                if (cell == null) {
-                    continue;
-                }
-                CellTile tile = TileCreator.createFromTiledMapTile(cell.getTile());
-				tile.setX(x);
-				tile.setY(y);
-				tile.setWidth(tileWidth);
-				tile.setHeight(tileHeight);
-				String type = cell.getTile().getProperties().get("type", String.class);
-                GameObject object = GameObjectFactory.create(type, tile);
-                if (type != null && type.contentEquals("robot")) {
-                    level.setRobot(object);
-                }
-                
-                actors[x][y] = object;
-            }
-        }
-        level.setObjectMap(actors);
+    public static Level create(MapLayers layers) {
+    	
+    	TiledMapTileLayer floorLayer = (TiledMapTileLayer) layers.get("floor");
+        TiledMapTileLayer objectLayer = (TiledMapTileLayer) layers.get("objects");
+        TiledMapTileLayer wallLayer = (TiledMapTileLayer) layers.get("wall");
+        TiledMapTileLayer rooflLayer = (TiledMapTileLayer) layers.get("roof");
+        
+        final Level level = new Level(floorLayer.getWidth(), floorLayer.getHeight(), floorLayer.getTileWidth(), floorLayer.getTileHeight());
+        level.setRoofMap(createMap(rooflLayer, level.getWidth(), level.getHeight()));
+        level.setWallMap(createMap(wallLayer, level.getWidth(), level.getHeight()));
+        level.setFloorMap(createMap(floorLayer, level.getWidth(), level.getHeight(), new TileUpdater() {
+        	@Override
+        	public void update(Cell cell, TileActor actor) {
+        		String type = cell.getTile().getProperties().get("type", String.class);
+            	if (type != null && type.contentEquals("exit")) {
+            		level.setExitPosition(actor.getPosition());
+            	}
+        	}
+        }));
+        level.setObjectMap(createMap(objectLayer, level.getWidth(), level.getHeight(), new TileUpdater() {
+        	@Override
+        	public void update(Cell cell, TileActor actor) {
+        		actor.addComponent(new MovementComponent(0.15f));
+        		String type = cell.getTile().getProperties().get("type", String.class);
+            	if (type != null && type.contentEquals("robot")) {
+            		level.setRobot(actor);
+            	}
+        	}
+        }));
 
         return level;
     }
+    
+    private static TileActor[][] createMap (TiledMapTileLayer layer, int levelColumnCount, int levelRowCount) {
+    	return createMap (layer, levelColumnCount, levelRowCount, null);
+    }
+    
+    private static TileActor[][] createMap (TiledMapTileLayer layer, int levelColumnCount, int levelRowCount, TileUpdater tileUpdater) {
+    	
+    	int columnCount = Math.min(layer.getWidth(), levelColumnCount);
+        int rowCount = Math.min(layer.getHeight(), levelRowCount);
+        
+        float tileWidth = layer.getTileWidth();
+        float tileHeight = layer.getTileHeight();
 
-    private static int[][] createFloorMap(TiledMapTileLayer floorLayer, int levelColumnCount, int levelRowCount) {
-        int columnCount = Math.min(floorLayer.getWidth(), levelColumnCount);
-        int rowCount = Math.min(floorLayer.getHeight(), levelRowCount);
-
-        int[][] floorMap = new int[levelColumnCount][levelRowCount];
-
+        TileActor[][] actors = new TileActor[levelColumnCount][levelRowCount];
         for (int y = rowCount - 1; y >= 0; y--) {
             for (int x = 0; x < columnCount; x++) {
-                Cell cell = floorLayer.getCell(x, y);
+                Cell cell = layer.getCell(x, y);
                 if (cell == null) {
-                    floorMap[x][y] = 0;
                     continue;
                 }
-
-                String type = cell.getTile().getProperties().get("type", String.class);
-                floorMap[x][y] = (type != null && type.contentEquals("exit")) ? 2 : 1;
+                TileActor object = TileActorCreator.createFromTiledMapTile(cell.getTile(), tileWidth, tileHeight);
+                object.setX(x);
+                object.setY(y);
+                if (tileUpdater != null) {
+                	tileUpdater.update(cell, object);
+                }
+                actors[x][y] = object;
             }
         }
-
-        return floorMap;
+        
+        return actors;
+    }
+    
+    private interface TileUpdater {
+    	public void update(Cell cell, TileActor actor);
     }
 }

@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import ua.com.tlftgames.ssocoban.level.Level;
 import ua.com.tlftgames.ssocoban.movement.direction.Direction;
 import ua.com.tlftgames.ssocoban.movement.direction.DirectionQueue;
-import ua.com.tlftgames.ssocoban.object.GameObject;
+import ua.com.tlftgames.ssocoban.tiled.TileActor;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -31,9 +31,9 @@ public class MovementController {
 			return;
 		}
 
-		final GameObject robot = level.getRobot();
+		final TileActor robot = level.getRobot();
 
-		GameObject box;
+		TileActor box;
 		if ((box = level.getNeighbour(robot, direction)) != null && level.moveObject(box, direction) == null) {
 			move(directionQueue.getNext());
 			return;
@@ -47,7 +47,7 @@ public class MovementController {
 		action.addAction(run(new Runnable() {
 			@Override
 			public void run() {
-				if (level.getFloorMap()[(int) robot.getX()][(int) robot.getY()] == 2) {
+				if (level.isExit(robot.getX(), robot.getY())) {
 					Gdx.app.exit();
 				}
 				move(directionQueue.getNext());

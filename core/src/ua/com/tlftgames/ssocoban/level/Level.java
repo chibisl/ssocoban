@@ -5,27 +5,42 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 import ua.com.tlftgames.ssocoban.component.MovementComponent;
 import ua.com.tlftgames.ssocoban.movement.direction.Direction;
-import ua.com.tlftgames.ssocoban.object.GameObject;
+import ua.com.tlftgames.ssocoban.tiled.TileActor;
 
 public class Level {
     private int width = 0;
     private int height = 0;
-    private GameObject[][] objectMap;
-    private GameObject robot;
-    private int[][] floorMap;
+    private float tileWidth = 0;
+    private float tileHeight = 0;
+    private TileActor[][] objectMap;
+    private TileActor robot;
+    private TileActor[][] roofMap;
+    private TileActor[][] wallMap;
+    private TileActor[][] floorMap;
+    private Vector2 exitPosition;
 
-    public Level(int width, int height) {
+    public Level(int width, int height, float tileWidth, float tileHeight) {
         this.width = width;
         this.height = height;
+        this.tileWidth = tileWidth;
+        this.tileHeight = tileHeight;
     }
     
-    private Vector2 getNewPosition(GameObject object, int direction) {
+    private Vector2 getNewPosition(TileActor object, int direction) {
         Vector2 directionVector = Direction.getVector2ByDirection(direction);
         return object.getPosition().add(directionVector);
     }
     
     private boolean isValidCoordinates(int x, int y) {
     	return (x >= 0 && y >= 0 && x < width && y < height);
+    }
+    
+    public float getTileWidth() {
+        return tileWidth;
+    }
+
+    public float getTileHeight() {
+        return tileHeight;
     }
 
     public int getWidth() {
@@ -36,36 +51,64 @@ public class Level {
         return height;
     }
 
-    public GameObject[][] getObjectMap() {
+    public TileActor[][] getObjectMap() {
         return objectMap;
     }
 
-    public void setObjectMap(GameObject[][] objectMap) {
+    public void setObjectMap(TileActor[][] objectMap) {
         this.objectMap = objectMap;
     }
 
-    public GameObject getRobot() {
+    public TileActor getRobot() {
         return this.robot;
     }
 
-    public void setRobot(GameObject robot) {
+    public void setRobot(TileActor robot) {
         this.robot = robot;
     }
+    
+    public TileActor[][] getRoofMap() {
+        return roofMap;
+    }
 
-    public int[][] getFloorMap() {
+    public void setRoofMap(TileActor[][] roofMap) {
+        this.roofMap = roofMap;
+    }
+    
+    public TileActor[][] getWallMap() {
+        return wallMap;
+    }
+
+    public void setWallMap(TileActor[][] wallMap) {
+        this.wallMap = wallMap;
+    }
+
+    public TileActor[][] getFloorMap() {
         return this.floorMap;
     }
 
-    public void setFloorMap(int[][] floorMap) {
+    public void setFloorMap(TileActor[][] floorMap) {
         this.floorMap = floorMap;
     }
+    
+    public Vector2 getExitPosition() {
+    	return this.exitPosition;
+    }
+    
+    public void setExitPosition(Vector2 position) {
+    	this.exitPosition = position;
+    }
+    
+    public boolean isExit(float x, float y) {
+    	return this.exitPosition.x == x && this.exitPosition.y == y;
+    }
 
-    public SequenceAction moveObject(GameObject object, int direction) {
+    public SequenceAction moveObject(TileActor object, int direction) {
         Vector2 newPosition = this.getNewPosition(object, direction);
         return this.moveObject(object, (int) newPosition.x, (int) newPosition.y);
     }
 
-    public SequenceAction moveObject(GameObject object, int x, int y) {
+    public SequenceAction moveObject(TileActor object, int x, int y) {
         if (!hasFloor(x, y) || !isCellFree(x, y)) {
             return null;
         }
@@ -76,12 +119,12 @@ public class Level {
         return object.getComponent(MovementComponent.class).moveTo(x, y);
     }
 
-    public GameObject getNeighbour(GameObject object, int direction) {
+    public TileActor getNeighbour(TileActor object, int direction) {
         Vector2 neighbourPosition = this.getNewPosition(object, direction);
         return this.getObject((int) neighbourPosition.x, (int) neighbourPosition.y);
     }
 
-    public GameObject getObject(int x, int y) {
+    public TileActor getObject(int x, int y) {
         if (!isValidCoordinates(x, y)) {
             return null;
         }
@@ -93,7 +136,7 @@ public class Level {
         if (!isValidCoordinates(x, y)) {
             return false;
         }
-        return floorMap[x][y] > 0;
+        return floorMap[x][y] != null;
     }
 
     public boolean isCellFree(int x, int y) {
@@ -104,7 +147,7 @@ public class Level {
         return this.hasFloor(x, y) && this.getObject(x, y) == null;
     }
     
-    public void removeObject(GameObject object) {  	
+    public void removeObject(TileActor object) {  	
     	this.removeObject((int)object.getX(), (int)object.getY());
     }
     
