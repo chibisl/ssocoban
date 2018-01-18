@@ -7,7 +7,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
@@ -27,17 +27,19 @@ public class LevelStage extends ManagedStage {
     @Override
     public void addAssets() {
         this.loadAsset(this.tmxPath, TiledMap.class);
+        this.loadAsset("maps/animations.tmx", TiledMap.class);
     }
 
     @Override
     public void show() {
         TiledMap map = this.getAsset(this.tmxPath);
-        
-        Level level = LevelFactory.create(map.getLayers());
-        
+        TiledMap animationMap = this.getAsset("maps/animations.tmx");
+        TiledMapTileLayer animationLayer = (TiledMapTileLayer) animationMap.getLayers().get(0);
+        Level level = LevelFactory.create(map.getLayers(), animationLayer);
+
         this.clear();
         this.addActor(new LevelGroup(level));
-        
+
         movementController = new MovementController(level);
     }
 
@@ -53,20 +55,15 @@ public class LevelStage extends ManagedStage {
     @Override
     public void uloadAssets() {
         this.unloadAsset(this.tmxPath);
+        this.unloadAsset("maps/animations.tmx");
     }
-    
-    public boolean keyDown (int keycode) {
-    	int direction = Direction.getDirectionByKey(keycode);
-    	if (direction != Direction.NONE) {
-    		movementController.addMovement(direction);
-    		return true;
-    	}
-    	return false;
-	}
-    
-    @Override
-    public void draw() {
-    	AnimatedTiledMapTile.updateAnimationBaseTime();
-    	super.draw();
+
+    public boolean keyDown(int keycode) {
+        int direction = Direction.getDirectionByKey(keycode);
+        if (direction != Direction.NONE) {
+            movementController.addMovement(direction);
+            return true;
+        }
+        return false;
     }
 }
