@@ -79,7 +79,7 @@ project(":core") {
 
     dependencies {
     	compile "com.badlogicgames.gdx:gdx:1.9.6"
-		compile files('libs/tlft-utils-1.1.jar')
+		compile files('libs/tlft-utils-1.2.jar')
     }
 }
 

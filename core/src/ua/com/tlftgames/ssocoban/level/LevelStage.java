@@ -11,13 +11,13 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
-import ua.com.tlftgames.ssocoban.movement.MovementController;
 import ua.com.tlftgames.ssocoban.movement.direction.Direction;
+import ua.com.tlftgames.ssocoban.script.ControllerScript;
 import ua.com.tlftgames.utils.scenes.scene2d.ManagedStage;
 
 public class LevelStage extends ManagedStage {
     private String tmxPath;
-    private MovementController movementController;
+    private ControllerScript controller;
 
     public LevelStage(String name) {
         StringBuilder builder = new StringBuilder("maps/");
@@ -40,7 +40,8 @@ public class LevelStage extends ManagedStage {
         this.clear();
         this.addActor(new LevelGroup(level));
 
-        movementController = new MovementController(level);
+        controller = new ControllerScript(level);
+        level.getRobot().addScript(controller);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class LevelStage extends ManagedStage {
     public boolean keyDown(int keycode) {
         int direction = Direction.getDirectionByKey(keycode);
         if (direction != Direction.NONE) {
-            movementController.addMovement(direction);
+            controller.addMovement(direction);
             return true;
         }
         return false;

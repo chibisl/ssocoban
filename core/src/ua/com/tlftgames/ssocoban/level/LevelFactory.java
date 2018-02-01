@@ -5,8 +5,8 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
-import ua.com.tlftgames.ssocoban.component.AnimationComponent;
-import ua.com.tlftgames.ssocoban.component.MovementComponent;
+import ua.com.tlftgames.ssocoban.script.AnimationScript;
+import ua.com.tlftgames.ssocoban.script.MovementScript;
 import ua.com.tlftgames.ssocoban.tiled.TileActor;
 import ua.com.tlftgames.ssocoban.tiled.TileActorCreator;
 
@@ -35,10 +35,10 @@ public class LevelFactory {
         level.setObjectMap(createMap(objectLayer, level.getWidth(), level.getHeight(), new TileUpdater() {
             @Override
             public void update(Cell cell, TileActor actor) {
-                actor.addComponent(new MovementComponent(0.2f));
+                actor.addScript(new MovementScript(0.2f));
                 String type = cell.getTile().getProperties().get("type", String.class);
                 if (type != null && type.contentEquals("robot")) {
-                    actor.addComponent(new AnimationComponent((TiledMapTileLayer) animations));
+                    actor.addScript(new AnimationScript((TiledMapTileLayer) animations));
                     level.setRobot(actor);
                 }
             }
