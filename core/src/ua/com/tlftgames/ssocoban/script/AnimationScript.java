@@ -50,6 +50,7 @@ public class AnimationScript extends Script {
         switch (event.getId()) {
         case Event.MOVE:
             ((AnimationTileActor) actor).setAnimation(animations.get(0));
+            this.playTime = 0;
             break;
         case Event.PULL:
             final int direction = (Integer) event.getData();

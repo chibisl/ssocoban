@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
 import ua.com.tlftgames.ssocoban.script.AnimationScript;
+import ua.com.tlftgames.ssocoban.script.ControllerScript;
 import ua.com.tlftgames.ssocoban.script.MovementScript;
 import ua.com.tlftgames.ssocoban.tiled.TileActor;
 import ua.com.tlftgames.ssocoban.tiled.TileActorCreator;
@@ -39,6 +40,7 @@ public class LevelFactory {
                 String type = cell.getTile().getProperties().get("type", String.class);
                 if (type != null && type.contentEquals("robot")) {
                     actor.addScript(new AnimationScript((TiledMapTileLayer) animations));
+                    actor.addScript(new ControllerScript(level));
                     level.setRobot(actor);
                 }
             }

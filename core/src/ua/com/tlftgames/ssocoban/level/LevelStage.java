@@ -17,7 +17,7 @@ import ua.com.tlftgames.utils.scenes.scene2d.ManagedStage;
 
 public class LevelStage extends ManagedStage {
     private String tmxPath;
-    private ControllerScript controller;
+    private Level level;
 
     public LevelStage(String name) {
         StringBuilder builder = new StringBuilder("maps/");
@@ -35,13 +35,10 @@ public class LevelStage extends ManagedStage {
         TiledMap map = this.getAsset(this.tmxPath);
         TiledMap animationMap = this.getAsset("maps/animations.tmx");
         TiledMapTileLayer animationLayer = (TiledMapTileLayer) animationMap.getLayers().get(0);
-        Level level = LevelFactory.create(map.getLayers(), animationLayer);
+        level = LevelFactory.create(map.getLayers(), animationLayer);
 
         this.clear();
         this.addActor(new LevelGroup(level));
-
-        controller = new ControllerScript(level);
-        level.getRobot().addScript(controller);
     }
 
     @Override
@@ -62,7 +59,7 @@ public class LevelStage extends ManagedStage {
     public boolean keyDown(int keycode) {
         int direction = Direction.getDirectionByKey(keycode);
         if (direction != Direction.NONE) {
-            controller.addMovement(direction);
+            this.level.getRobot().getScript(ControllerScript.class).addMovement(direction);
             return true;
         }
         return false;
