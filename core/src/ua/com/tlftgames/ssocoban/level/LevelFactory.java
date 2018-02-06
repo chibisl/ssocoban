@@ -1,19 +1,23 @@
 package ua.com.tlftgames.ssocoban.level;
 
-import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
+import com.badlogic.gdx.utils.Array;
 
 import ua.com.tlftgames.ssocoban.script.AnimationScript;
 import ua.com.tlftgames.ssocoban.script.ControllerScript;
 import ua.com.tlftgames.ssocoban.script.MovementScript;
 import ua.com.tlftgames.ssocoban.tiled.TileActor;
 import ua.com.tlftgames.ssocoban.tiled.TileActorCreator;
+import ua.com.tlftgames.ssocoban.tiled.TileAnimationCreator;
 
 public class LevelFactory {
 
-    public static Level create(MapLayers layers, final MapLayer animations) {
+    public static Level create(MapLayers layers, final TiledMapTileLayer animationsLayer) {
 
         TiledMapTileLayer floorLayer = (TiledMapTileLayer) layers.get("floor");
         TiledMapTileLayer objectLayer = (TiledMapTileLayer) layers.get("objects");
@@ -39,7 +43,7 @@ public class LevelFactory {
                 actor.addScript(new MovementScript(0.2f));
                 String type = cell.getTile().getProperties().get("type", String.class);
                 if (type != null && type.contentEquals("robot")) {
-                    actor.addScript(new AnimationScript((TiledMapTileLayer) animations));
+                    actor.addScript(new AnimationScript(getAnimations(animationsLayer)));
                     actor.addScript(new ControllerScript(level));
                     level.setRobot(actor);
                 }
@@ -47,6 +51,21 @@ public class LevelFactory {
         }));
 
         return level;
+    }
+    
+    private static Array<Animation<TextureRegion>> getAnimations(TiledMapTileLayer animationsLayer) {
+    	int columnCount = animationsLayer.getWidth();
+        int rowCount = animationsLayer.getHeight();        
+        Array<Animation<TextureRegion>> animations = new Array<Animation<TextureRegion>>(columnCount * rowCount);
+        for (int y = rowCount - 1; y >= 0; y--) {
+            for (int x = 0; x < columnCount; x++) {
+                Cell cell = animationsLayer.getCell(x, y);
+                animations.add(
+                        TileAnimationCreator.createFromAnimatedTiledMapTile((AnimatedTiledMapTile) cell.getTile()));
+            }
+        }
+        
+        return animations;
     }
 
     private static TileActor[][] createMap(TiledMapTileLayer layer, int levelColumnCount, int levelRowCount) {

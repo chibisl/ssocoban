@@ -2,10 +2,9 @@ package ua.com.tlftgames.ssocoban.level;
 
 import com.badlogic.gdx.math.Vector2;
 
-import ua.com.tlftgames.ssocoban.Event;
 import ua.com.tlftgames.ssocoban.movement.direction.Direction;
+import ua.com.tlftgames.ssocoban.script.MovementScript;
 import ua.com.tlftgames.ssocoban.tiled.TileActor;
-import ua.com.tlftgames.utils.scenes.scene2d.script.ScriptEvent;
 
 public class Level {
     private int width = 0;
@@ -117,7 +116,7 @@ public class Level {
         this.removeObject(object);
         objectMap[(int) newPosition.x][(int) newPosition.y] = object;
 
-        object.dispatch(new ScriptEvent(Event.MOVE, newPosition));
+        object.getScript(MovementScript.class).move(newPosition);
         return true;
     }
 

@@ -1,12 +1,16 @@
 package ua.com.tlftgames.ssocoban.script;
 
-import ua.com.tlftgames.ssocoban.Event;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+
+import com.badlogic.gdx.Gdx;
+
 import ua.com.tlftgames.ssocoban.level.Level;
 import ua.com.tlftgames.ssocoban.movement.direction.Direction;
 import ua.com.tlftgames.ssocoban.movement.direction.DirectionQueue;
 import ua.com.tlftgames.ssocoban.tiled.TileActor;
 import ua.com.tlftgames.utils.scenes.scene2d.script.Script;
-import ua.com.tlftgames.utils.scenes.scene2d.script.ScriptEvent;
 
 public class ControllerScript extends Script {
     private Level level;
@@ -25,31 +29,43 @@ public class ControllerScript extends Script {
     }
 
     private void move(final int direction) {
-        final TileActor robot = level.getRobot();
-        if (level.isExit(robot.getPosition().x, robot.getPosition().y)) {
-            robot.dispatch(Event.EXIT);
+    	TileActor robot = level.getRobot();
+    	if (level.isExit(robot.getPosition().x, robot.getPosition().y)) {
+        	this.leaveLevel();
+            return;
         }
 
         if (direction == Direction.NONE) {
             return;
         }
+        
+        robot.getScript(AnimationScript.class).pull(direction);
 
         TileActor box;
         if ((box = level.getNeighbour(robot, direction)) != null) {
-            robot.dispatch(new ScriptEvent(Event.PULL, new Integer(direction)));
             level.moveObject(box, direction);
         }
 
-        if (!level.moveObject(robot, direction)) {
-            this.move(this.directionQueue.getNext());
-        }
+        level.moveObject(robot, direction);
+        
+        float moveDuration = robot.getScript(MovementScript.class).getDuration();
+        robot.addAction(sequence(delay(moveDuration), run(new Runnable() {
+        	@Override
+            public void run() {
+        		move(directionQueue.getNext());
+            }
+        })));
     }
-
-    @Override
-    public void handle(ScriptEvent event) {
-        if (event.getId() == Event.STOP) {
-            this.move(this.directionQueue.getNext());
-        }
+    
+    private void leaveLevel() {
+    	TileActor robot = level.getRobot();
+    	robot.getScript(AnimationScript.class).exit();
+        robot.addAction(sequence(delay(1f), run(new Runnable() {
+        	@Override
+            public void run() {
+                Gdx.app.exit();
+            }
+        })));
     }
 
 }
