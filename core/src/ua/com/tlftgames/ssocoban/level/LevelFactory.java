@@ -11,13 +11,14 @@ import com.badlogic.gdx.utils.Array;
 import ua.com.tlftgames.ssocoban.script.AnimationScript;
 import ua.com.tlftgames.ssocoban.script.ControllerScript;
 import ua.com.tlftgames.ssocoban.script.MovementScript;
+import ua.com.tlftgames.ssocoban.stage.StageManager;
 import ua.com.tlftgames.ssocoban.tiled.TileActor;
 import ua.com.tlftgames.ssocoban.tiled.TileActorCreator;
 import ua.com.tlftgames.ssocoban.tiled.TileAnimationCreator;
 
 public class LevelFactory {
 
-    public static Level create(MapLayers layers, final TiledMapTileLayer animationsLayer) {
+    public static Level create(MapLayers layers, final TiledMapTileLayer animationsLayer, final StageManager stageManager) {
 
         TiledMapTileLayer floorLayer = (TiledMapTileLayer) layers.get("floor");
         TiledMapTileLayer objectLayer = (TiledMapTileLayer) layers.get("objects");
@@ -44,7 +45,7 @@ public class LevelFactory {
                 String type = cell.getTile().getProperties().get("type", String.class);
                 if (type != null && type.contentEquals("robot")) {
                     actor.addScript(new AnimationScript(getAnimations(animationsLayer)));
-                    actor.addScript(new ControllerScript(level));
+                    actor.addScript(new ControllerScript(level, stageManager));
                     level.setRobot(actor);
                 }
             }

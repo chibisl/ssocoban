@@ -98,8 +98,8 @@ public class Level {
         this.exitPosition = position;
     }
 
-    public boolean isExit(float x, float y) {
-        return this.exitPosition.x == x && this.exitPosition.y == y;
+    public boolean isExitReached() {
+        return this.exitPosition.x == robot.getX() && this.exitPosition.y == robot.getY();
     }
 
     public boolean moveObject(TileActor object, int direction) {

@@ -4,7 +4,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
-import ua.com.tlftgames.ssocoban.level.LevelStage;
+import ua.com.tlftgames.ssocoban.stage.StageManager;
 import ua.com.tlftgames.utils.StageGame;
 import ua.com.tlftgames.utils.core.GameCore;
 
@@ -17,7 +17,8 @@ public class Game extends StageGame {
 	public void create() {
 		super.create();
 		GameCore.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-		this.getScreen().setStage(new LevelStage("level1"));
+		StageManager stageManager = new StageManager(this.getScreen());
+		stageManager.startLevel(1);
 	}
 
 }

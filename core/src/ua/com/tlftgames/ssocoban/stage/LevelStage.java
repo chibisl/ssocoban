@@ -1,4 +1,4 @@
-package ua.com.tlftgames.ssocoban.level;
+package ua.com.tlftgames.ssocoban.stage;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.forever;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.rotateTo;
@@ -11,6 +11,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
+import ua.com.tlftgames.ssocoban.level.Level;
+import ua.com.tlftgames.ssocoban.level.LevelFactory;
+import ua.com.tlftgames.ssocoban.level.LevelGroup;
 import ua.com.tlftgames.ssocoban.movement.direction.Direction;
 import ua.com.tlftgames.ssocoban.script.ControllerScript;
 import ua.com.tlftgames.utils.scenes.scene2d.ManagedStage;
@@ -18,8 +21,10 @@ import ua.com.tlftgames.utils.scenes.scene2d.ManagedStage;
 public class LevelStage extends ManagedStage {
     private String tmxPath;
     private Level level;
+    private StageManager stageManager;
 
-    public LevelStage(String name) {
+    public LevelStage(StageManager stageManager, String name) {
+    	this.stageManager = stageManager;
         StringBuilder builder = new StringBuilder("maps/");
         this.tmxPath = builder.append(name).append(".tmx").toString();
     }
@@ -35,8 +40,7 @@ public class LevelStage extends ManagedStage {
         TiledMap map = this.getAsset(this.tmxPath);
         TiledMap animationMap = this.getAsset("maps/animations.tmx");
         TiledMapTileLayer animationLayer = (TiledMapTileLayer) animationMap.getLayers().get(0);
-        level = LevelFactory.create(map.getLayers(), animationLayer);
-
+        level = LevelFactory.create(map.getLayers(), animationLayer, this.stageManager);
         this.clear();
         this.addActor(new LevelGroup(level));
     }

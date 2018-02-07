@@ -4,24 +4,29 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
-import com.badlogic.gdx.Gdx;
-
 import ua.com.tlftgames.ssocoban.level.Level;
 import ua.com.tlftgames.ssocoban.movement.direction.Direction;
 import ua.com.tlftgames.ssocoban.movement.direction.DirectionQueue;
+import ua.com.tlftgames.ssocoban.stage.StageManager;
 import ua.com.tlftgames.ssocoban.tiled.TileActor;
 import ua.com.tlftgames.utils.scenes.scene2d.script.Script;
 
 public class ControllerScript extends Script {
     private Level level;
+    private StageManager stageManager;
     private DirectionQueue directionQueue;
+    private boolean finished = false;
 
-    public ControllerScript(Level level) {
+    public ControllerScript(Level level, StageManager stageManager) {
         this.level = level;
+        this.stageManager = stageManager;
         directionQueue = new DirectionQueue();
     }
 
     public void addMovement(int direction) {
+    	if (finished) {
+    		return;
+    	}
         this.directionQueue.add(direction);
         if (this.directionQueue.getCount() == 1) {
             this.move(this.directionQueue.getCurrent());
@@ -29,8 +34,7 @@ public class ControllerScript extends Script {
     }
 
     private void move(final int direction) {
-    	TileActor robot = level.getRobot();
-    	if (level.isExit(robot.getPosition().x, robot.getPosition().y)) {
+    	if (level.isExitReached()) {
         	this.leaveLevel();
             return;
         }
@@ -39,6 +43,7 @@ public class ControllerScript extends Script {
             return;
         }
         
+        TileActor robot = level.getRobot();
         robot.getScript(AnimationScript.class).pull(direction);
 
         TileActor box;
@@ -58,12 +63,13 @@ public class ControllerScript extends Script {
     }
     
     private void leaveLevel() {
+    	this.finished = true;
     	TileActor robot = level.getRobot();
     	robot.getScript(AnimationScript.class).exit();
         robot.addAction(sequence(delay(1f), run(new Runnable() {
         	@Override
             public void run() {
-                Gdx.app.exit();
+        		stageManager.nextLevel();
             }
         })));
     }
