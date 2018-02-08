@@ -11,6 +11,14 @@ public class StageManager {
 		this.screen = screen;
 	}
 	
+	public void showMenu() {
+		this.showLevelMap();
+	}
+	
+	public void showLevelMap() {
+		this.startLevel(1);
+	}
+	
 	public void startLevel(int level) {
 		this.screen.setStage(new LevelStage(this, "level" + level));
 	}

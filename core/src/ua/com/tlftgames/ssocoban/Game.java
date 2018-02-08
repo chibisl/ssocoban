@@ -18,7 +18,7 @@ public class Game extends StageGame {
 		super.create();
 		GameCore.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 		StageManager stageManager = new StageManager(this.getScreen());
-		stageManager.startLevel(1);
+		stageManager.showMenu();
 	}
 
 }
